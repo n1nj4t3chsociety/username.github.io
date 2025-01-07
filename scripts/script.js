@@ -1,19 +1,16 @@
 let femaleRobotVoice;
 
-// Função para iniciar a animação de inicialização do Windows XP
 function startWindowsStartup() {
     const windowsStartup = document.getElementById('windows-startup');
     const xpSound = document.getElementById('xp-sound');
     xpSound.play();
 
-    // Esconder a animação de inicialização do Windows XP após o som terminar
     xpSound.addEventListener('ended', () => {
         windowsStartup.style.display = 'none';
         startCountdown();
     });
 }
 
-// Função para iniciar a contagem regressiva com uma voz robotizada feminina
 function startCountdown() {
     const speakCountdown = (number) => {
         const utterance = new SpeechSynthesisUtterance(number.toString());
@@ -32,51 +29,33 @@ function startCountdown() {
             clearInterval(countdownInterval);
             setTimeout(() => {
                 speakWelcomeMessage();
-                startCyberpunkAnimation();
             }, 1000);
         }
     }, 1000);
 }
 
-// Função para iniciar a animação cyberpunk
-function startCyberpunkAnimation() {
-    const cyberpunk = document.getElementById('cyberpunk');
-    cyberpunk.style.opacity = 1;
-    setTimeout(() => {
-        cyberpunk.style.opacity = 0;
-        document.querySelector('.tech-name').style.display = 'block';
-        typeEffect();
-        animate();
-    }, 2000); // Duração da animação cyberpunk
-}
-
-// Falar mensagem de boas-vindas
 function speakWelcomeMessage() {
-    const welcomeMessage = "SEJA BEM VINDO AO PORTAL MAIS NERD DA GALÁXIA. DE NERD, PRA NERD. NINJA TECH.";
+    const welcomeMessage = "Seja bem-vindo à Ninja Tech.";
     const utterance = new SpeechSynthesisUtterance(welcomeMessage);
     utterance.rate = 1;
     utterance.pitch = 1;
     utterance.voice = femaleRobotVoice;
+
     speechSynthesis.speak(utterance);
+
+    utterance.onend = () => {
+        showVideo();
+    };
 }
 
-// Animação de digitação
-const text = "Bem-vindo ao portal nerd, pra nerds!";
-const speed = 100;
-let index = 0;
-const typewriter = document.getElementById("typewriter");
+function showVideo() {
+    const videoContainer = document.getElementById('video-container');
+    const videoFrame = document.getElementById('video-frame');
 
-function typeEffect() {
-    if (index < text.length) {
-        typewriter.textContent += text.charAt(index);
-        index++;
-        setTimeout(typeEffect, speed);
-    } else {
-        typewriter.style.borderRight = "none"; // Remove cursor ao final
-    }
+    videoContainer.style.display = 'flex';
+    videoFrame.src += "?autoplay=1";
 }
 
-// Animação de partículas no fundo
 const canvas = document.getElementById("background");
 const ctx = canvas.getContext("2d");
 
@@ -122,17 +101,15 @@ init();
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Desenha a "Matrix" com códigos aleatórios no fundo
     ctx.fillStyle = "rgba(0, 255, 0, 0.5)";
     ctx.font = "20px monospace";
     for (let i = 0; i < canvas.width; i += 30) {
-        const char = String.fromCharCode(Math.random() * (126 - 33) + 33); // Códigos ASCII de caracteres imprimíveis
+        const char = String.fromCharCode(Math.random() * (126 - 33) + 33);
         const x = i;
         const y = Math.random() * canvas.height;
         ctx.fillText(char, x, y);
     }
 
-    // Desenha as partículas
     particlesArray.forEach((particle) => {
         particle.update();
         particle.draw();
@@ -141,9 +118,16 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
-// Ajusta o canvas ao redimensionar a janela
 window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     init();
 });
+
+window.onload = () => {
+    speechSynthesis.onvoiceschanged = () => {
+        const voices = speechSynthesis.getVoices();
+        femaleRobotVoice = voices.find(voice => voice.name.includes('Google UK English Female') || voice.name.includes('Google US English Female'));
+        startWindowsStartup();
+    };
+};
