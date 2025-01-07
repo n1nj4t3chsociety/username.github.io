@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N1NJ4 WEB - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> <!-- Fonte pixelada -->
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1 id="typewriter">Login</h1>
+        <div class="tech-name">N1NJ4 TECH</div> <!-- Nome com cor rosa-choque e borda verde-limão -->
+        <div class="login-form">
+            <input type="password" id="password" placeholder="Enter Password">
+            <button onclick="checkPassword()">Login</button>
+            <div class="hint">Hint: The password is the word for 'unknown' or 'unnamed'.</div>
+        </div>
+        <div class="v-image">
+            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.etsystatic.com%2F24871129%2Fr%2Fil%2F749226%2F2833087435%2Fil_fullxfull.2833087435_ebnr.jpg&f=1&nofb=1&ipt=5552c15cae87230d4ee3699dcbf45d746eb5e8ced52348081523654b5676b653&ipo=images" alt="Anonymous Mask">
+        </div>
+    </div>
+    <script src="scripts/script.js"></script>
+    <script>
+        function checkPassword() {
+            const password = document.getElementById('password').value;
+            if (password === 'anonymous') {
+                window.location.href = "index.html"; // Redireciona para a página inicial pós-login
+            } else {
+                alert('Access Denied');
+            }
+        }
+    </script>
+</body>
+</html>
