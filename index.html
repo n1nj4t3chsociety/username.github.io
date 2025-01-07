@@ -3,10 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My GitHub Page</title>
+    <title>N1NJ4 WEB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> <!-- Fonte pixelada -->
+    <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-    <h1>Welcome to My GitHub Page</h1>
-    <p>This is a simple page hosted on GitHub Pages.</p>
+    <div class="windows-startup" id="windows-startup"></div>
+    <canvas id="background"></canvas>
+    <div class="container">
+        <h1 id="typewriter"></h1>
+        <div class="tech-name" style="display: none;">N1NJ4 TECH</div> <!-- Nome com cor rosa-choque e borda verde-limão -->
+    </div>
+    <div class="cyberpunk" id="cyberpunk"></div>
+    <audio id="xp-sound" src="https://www.myinstants.com/media/sounds/windows-xp-startup.mp3"></audio> <!-- Som de inicialização do Windows XP -->
+    <script src="scripts/script.js"></script>
+    <script>
+        window.onload = () => {
+            // Carregar as vozes e selecionar a voz de robô feminina
+            speechSynthesis.onvoiceschanged = () => {
+                const voices = speechSynthesis.getVoices();
+                femaleRobotVoice = voices.find(voice => voice.name.includes('Google UK English Female') || voice.name.includes('Google US English Female'));
+
+                // Iniciar a animação de inicialização do Windows XP após carregar as vozes
+                startWindowsStartup();
+            };
+        };
+    </script>
 </body>
 </html>
