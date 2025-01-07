@@ -5,7 +5,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>N1NJ4 WEB</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> <!-- Fonte pixelada -->
-    <link rel="stylesheet" href="styles/style.css">
+    <style>
+        /* CSS para estilo */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #00ff00;
+            background: #000;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            text-align: center;
+            z-index: 1;
+        }
+        h1 {
+            font-size: 3rem;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 2px solid #00ff00;
+            width: 0;
+        }
+        .tech-name {
+            font-family: 'Press Start 2P', cursive; /* Fonte pixelada */
+            font-size: 6rem;
+            color: #ff3399; /* Rosa-choque */
+            font-weight: bold;
+            margin-top: 20px;
+            z-index: 1;
+            text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00; /* Efeito de borda verde-limão */
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .cyberpunk {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://cdn.pixabay.com/photo/2017/08/30/11/29/matrix-2694671_1280.jpg') no-repeat center center;
+            background-size: cover;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+        .windows-startup {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif') no-repeat center center;
+            background-size: cover;
+            z-index: 3;
+        }
+        .video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .video-container iframe {
+            width: 80%;
+            height: 80%;
+            border: none;
+        }
+    </style>
 </head>
 <body>
     <div class="windows-startup" id="windows-startup"></div>
@@ -15,9 +95,162 @@
         <div class="tech-name" style="display: none;">N1NJ4 TECH</div> <!-- Nome com cor rosa-choque e borda verde-limão -->
     </div>
     <div class="cyberpunk" id="cyberpunk"></div>
+    <div class="video-container">
+        <iframe src="https://drive.google.com/file/d/13pSrPzx--XEJ6O6x4SVtc2dXczh7YG9M/preview" allow="autoplay"></iframe>
+    </div>
     <audio id="xp-sound" src="https://www.myinstants.com/media/sounds/windows-xp-startup.mp3"></audio> <!-- Som de inicialização do Windows XP -->
-    <script src="scripts/script.js"></script>
     <script>
+        let femaleRobotVoice;
+
+        // Função para iniciar a animação de inicialização do Windows XP
+        function startWindowsStartup() {
+            const windowsStartup = document.getElementById('windows-startup');
+            const xpSound = document.getElementById('xp-sound');
+            xpSound.play();
+
+            // Esconder a animação de inicialização do Windows XP após o som terminar
+            xpSound.addEventListener('ended', () => {
+                windowsStartup.style.display = 'none';
+                startCountdown();
+            });
+        }
+
+        // Função para iniciar a contagem regressiva com uma voz robotizada feminina
+        function startCountdown() {
+            const speakCountdown = (number) => {
+                const utterance = new SpeechSynthesisUtterance(number.toString());
+                utterance.rate = 1;
+                utterance.pitch = 1;
+                utterance.voice = femaleRobotVoice;
+                speechSynthesis.speak(utterance);
+            };
+
+            let countdown = 5;
+            const countdownInterval = setInterval(() => {
+                if (countdown > 0) {
+                    speakCountdown(countdown);
+                    countdown--;
+                } else {
+                    clearInterval(countdownInterval);
+                    setTimeout(() => {
+                        speakWelcomeMessage();
+                        startCyberpunkAnimation();
+                    }, 1000);
+                }
+            }, 1000);
+        }
+
+        // Função para iniciar a animação cyberpunk
+        function startCyberpunkAnimation() {
+            const cyberpunk = document.getElementById('cyberpunk');
+            cyberpunk.style.opacity = 1;
+            setTimeout(() => {
+                cyberpunk.style.opacity = 0;
+                document.querySelector('.tech-name').style.display = 'block';
+                typeEffect();
+                animate();
+            }, 2000); // Duração da animação cyberpunk
+        }
+
+        // Falar mensagem de boas-vindas
+        function speakWelcomeMessage() {
+            const welcomeMessage = "SEJA BEM VINDO AO PORTAL MAIS NERD DA GALÁXIA. DE NERD, PRA NERD. NINJA TECH.";
+            const utterance = new SpeechSynthesisUtterance(welcomeMessage);
+            utterance.rate = 1;
+            utterance.pitch = 1;
+            utterance.voice = femaleRobotVoice;
+            speechSynthesis.speak(utterance);
+        }
+
+        // Animação de digitação
+        const text = "Bem-vindo ao portal nerd, pra nerds!";
+        const speed = 100;
+        let index = 0;
+        const typewriter = document.getElementById("typewriter");
+
+        function typeEffect() {
+            if (index < text.length) {
+                typewriter.textContent += text.charAt(index);
+                index++;
+                setTimeout(typeEffect, speed);
+            } else {
+                typewriter.style.borderRight = "none"; // Remove cursor ao final
+            }
+        }
+
+        // Animação de partículas no fundo
+        const canvas = document.getElementById("background");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray = [];
+        const numberOfParticles = 100;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 5 + 1;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 3 - 1.5;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+                if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = "#00ff00";
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            particlesArray = [];
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+        init();
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Desenha a "Matrix" com códigos aleatórios no fundo
+            ctx.fillStyle = "rgba(0, 255, 0, 0.5)";
+            ctx.font = "20px monospace";
+            for (let i = 0; i < canvas.width; i += 30) {
+                const char = String.fromCharCode(Math.random() * (126 - 33) + 33); // Códigos ASCII de caracteres imprimíveis
+                const x = i;
+                const y = Math.random() * canvas.height;
+                ctx.fillText(char, x, y);
+            }
+
+            // Desenha as partículas
+            particlesArray.forEach((particle) => {
+                particle.update();
+                particle.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        // Ajusta o canvas ao redimensionar a janela
+        window.addEventListener("resize", () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            init();
+        });
+
+        // Iniciar a animação de inicialização do Windows XP
         window.onload = () => {
             // Carregar as vozes e selecionar a voz de robô feminina
             speechSynthesis.onvoiceschanged = () => {
