@@ -143,7 +143,6 @@
             utterance.pitch = 1;
             utterance.voice = femaleRobotVoice;
 
-            // Executa o áudio e, ao final, chama a função de exibição do vídeo
             speechSynthesis.speak(utterance);
 
             utterance.onend = () => {
@@ -155,9 +154,8 @@
             const videoContainer = document.getElementById('video-container');
             const videoFrame = document.getElementById('video-frame');
 
-            // Exibe o vídeo e inicia a reprodução somente após a fala
             videoContainer.style.display = 'flex';
-            videoFrame.src += "?autoplay=1"; // Garante que o vídeo inicie automaticamente
+            videoFrame.src += "?autoplay=1";
         }
 
         const canvas = document.getElementById("background");
