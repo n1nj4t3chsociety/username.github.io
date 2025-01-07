@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>N1NJ4 WEB</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> <!-- Fonte pixelada -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         /* CSS para estilo */
         body {
@@ -31,13 +31,13 @@
             width: 0;
         }
         .tech-name {
-            font-family: 'Press Start 2P', cursive; /* Fonte pixelada */
+            font-family: 'Press Start 2P', cursive;
             font-size: 6rem;
-            color: #ff3399; /* Rosa-choque */
+            color: #ff3399;
             font-weight: bold;
             margin-top: 20px;
             z-index: 1;
-            text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00; /* Efeito de borda verde-limão */
+            text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
         }
         canvas {
             position: absolute;
@@ -92,30 +92,26 @@
     <canvas id="background"></canvas>
     <div class="container">
         <h1 id="typewriter"></h1>
-        <div class="tech-name" style="display: none;">N1NJ4 TECH</div> <!-- Nome com cor rosa-choque e borda verde-limão -->
+        <div class="tech-name" style="display: none;">N1NJ4 TECH</div>
     </div>
     <div class="cyberpunk" id="cyberpunk"></div>
     <div class="video-container">
         <iframe src="https://drive.google.com/file/d/13pSrPzx--XEJ6O6x4SVtc2dXczh7YG9M/preview" allow="autoplay"></iframe>
     </div>
-    <audio id="xp-sound" src="https://www.myinstants.com/media/sounds/windows-xp-startup.mp3"></audio> <!-- Som de inicialização do Windows XP -->
+    <audio id="xp-sound" src="https://www.myinstants.com/media/sounds/windows-xp-startup.mp3"></audio>
     <script>
         let femaleRobotVoice;
 
-        // Função para iniciar a animação de inicialização do Windows XP
         function startWindowsStartup() {
             const windowsStartup = document.getElementById('windows-startup');
             const xpSound = document.getElementById('xp-sound');
             xpSound.play();
-
-            // Esconder a animação de inicialização do Windows XP após o som terminar
             xpSound.addEventListener('ended', () => {
                 windowsStartup.style.display = 'none';
                 startCountdown();
             });
         }
 
-        // Função para iniciar a contagem regressiva com uma voz robotizada feminina
         function startCountdown() {
             const speakCountdown = (number) => {
                 const utterance = new SpeechSynthesisUtterance(number.toString());
@@ -124,7 +120,6 @@
                 utterance.voice = femaleRobotVoice;
                 speechSynthesis.speak(utterance);
             };
-
             let countdown = 5;
             const countdownInterval = setInterval(() => {
                 if (countdown > 0) {
@@ -140,7 +135,6 @@
             }, 1000);
         }
 
-        // Função para iniciar a animação cyberpunk
         function startCyberpunkAnimation() {
             const cyberpunk = document.getElementById('cyberpunk');
             cyberpunk.style.opacity = 1;
@@ -149,10 +143,9 @@
                 document.querySelector('.tech-name').style.display = 'block';
                 typeEffect();
                 animate();
-            }, 2000); // Duração da animação cyberpunk
+            }, 2000);
         }
 
-        // Falar mensagem de boas-vindas
         function speakWelcomeMessage() {
             const welcomeMessage = "SEJA BEM VINDO AO PORTAL MAIS NERD DA GALÁXIA. DE NERD, PRA NERD. NINJA TECH.";
             const utterance = new SpeechSynthesisUtterance(welcomeMessage);
@@ -162,7 +155,6 @@
             speechSynthesis.speak(utterance);
         }
 
-        // Animação de digitação
         const text = "Bem-vindo ao portal nerd, pra nerds!";
         const speed = 100;
         let index = 0;
@@ -174,11 +166,10 @@
                 index++;
                 setTimeout(typeEffect, speed);
             } else {
-                typewriter.style.borderRight = "none"; // Remove cursor ao final
+                typewriter.style.borderRight = "none";
             }
         }
 
-        // Animação de partículas no fundo
         const canvas = document.getElementById("background");
         const ctx = canvas.getContext("2d");
 
@@ -223,41 +214,31 @@
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Desenha a "Matrix" com códigos aleatórios no fundo
             ctx.fillStyle = "rgba(0, 255, 0, 0.5)";
             ctx.font = "20px monospace";
             for (let i = 0; i < canvas.width; i += 30) {
-                const char = String.fromCharCode(Math.random() * (126 - 33) + 33); // Códigos ASCII de caracteres imprimíveis
+                const char = String.fromCharCode(Math.random() * (126 - 33) + 33);
                 const x = i;
                 const y = Math.random() * canvas.height;
                 ctx.fillText(char, x, y);
             }
-
-            // Desenha as partículas
             particlesArray.forEach((particle) => {
                 particle.update();
                 particle.draw();
             });
-
             requestAnimationFrame(animate);
         }
 
-        // Ajusta o canvas ao redimensionar a janela
         window.addEventListener("resize", () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             init();
         });
 
-        // Iniciar a animação de inicialização do Windows XP
         window.onload = () => {
-            // Carregar as vozes e selecionar a voz de robô feminina
             speechSynthesis.onvoiceschanged = () => {
                 const voices = speechSynthesis.getVoices();
                 femaleRobotVoice = voices.find(voice => voice.name.includes('Google UK English Female') || voice.name.includes('Google US English Female'));
-
-                // Iniciar a animação de inicialização do Windows XP após carregar as vozes
                 startWindowsStartup();
             };
         };
